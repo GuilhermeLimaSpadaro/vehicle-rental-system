@@ -1,24 +1,19 @@
 package br.com.portifolio.vehiclerentalsys.repository;
 
-import br.com.portifolio.vehiclerentalsys.model.entities.Vehicle;
-import br.com.portifolio.vehiclerentalsys.model.exception.VehicleException;
-import br.com.portifolio.vehiclerentalsys.model.interfaces.VehicleInterface;
+import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
+import br.com.portifolio.vehiclerentalsys.domain.exception.VehicleException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VehicleRepository implements VehicleInterface {
+public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
     private List<Vehicle> vehicleList = new ArrayList<>();
 
-    public VehicleRepository() {
+    public InMemoryVehicleRepository() {
     }
 
-    public VehicleRepository(List<Vehicle> vehicleList) {
+    public InMemoryVehicleRepository(List<Vehicle> vehicleList) {
         this.vehicleList = vehicleList;
-    }
-
-    public List<Vehicle> getVehicleList() {
-        return this.vehicleList;
     }
 
     public void addVehicle(Vehicle vehicle) throws VehicleException {
@@ -28,22 +23,22 @@ public class VehicleRepository implements VehicleInterface {
         vehicleList.add(vehicle);
     }
 
-    public void removeVehicle(String model) throws VehicleException {
-        Vehicle vehicle = this.findVehicleByName(model);
+    public void removeVehicle(String plate) throws VehicleException {
+        Vehicle vehicle = this.findVehicleByPlate(plate);
         this.vehicleList.remove(vehicle);
     }
 
-    public Vehicle findVehicleByName(String model) throws VehicleException {
+    public Vehicle findVehicleByPlate(String plate) throws VehicleException {
         if (this.vehicleList.isEmpty()) {
             throw new VehicleException("Lista nao pode ser vazia!");
         } else {
             for (Vehicle vehicleObj : this.vehicleList) {
-                if (model.trim().equalsIgnoreCase(vehicleObj.getModel())) {
+                if (plate.trim().equalsIgnoreCase(vehicleObj.getPlate())) {
                     return vehicleObj;
                 }
             }
 
-            throw new VehicleException("Veiculo nao encontrado! ID: " + model);
+            throw new VehicleException("Veiculo nao encontrado! Placa: " + plate);
         }
     }
 

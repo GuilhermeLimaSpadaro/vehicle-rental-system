@@ -1,0 +1,49 @@
+package br.com.portifolio.vehiclerentalsys.domain.model;
+
+import java.time.LocalDate;
+
+
+public class Rental implements Comparable<Rental> {
+    private final Integer id;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final Client client;
+    private final Vehicle vehicle;
+
+    public Rental(Integer id, LocalDate startDate, LocalDate endDate, Client client, Vehicle vehicle) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.client = client;
+        this.vehicle = vehicle;
+    }
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public Client getClient() {
+        return this.client;
+    }
+
+    public Vehicle getVehicle() {
+        return this.vehicle;
+    }
+
+    public String toString() {
+        return "Aluguel | ID: " + this.id + " | Saida: " + String.valueOf(this.startDate) + " | Devolucao: " + String.valueOf(this.endDate) + " | Cliente: " + String.valueOf(this.client) + " | Carro: " + String.valueOf(this.vehicle) + "\n";
+    }
+
+    @Override
+    public int compareTo(Rental otherRental) {
+        return this.id.compareTo(otherRental.id);
+    }
+}

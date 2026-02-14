@@ -1,6 +1,5 @@
-package br.com.portifolio.vehiclerentalsys.model.entities;
+package br.com.portifolio.vehiclerentalsys.domain.model;
 
-import java.util.Objects;
 
 public class Client implements Comparable<Client> {
     private final Integer id;
@@ -23,31 +22,11 @@ public class Client implements Comparable<Client> {
         return this.name;
     }
 
-    public String getDocument() {
-        return this.document;
-    }
-
-    public String getPhone() {
-        return this.phone;
-    }
-
     public String toString() {
         return "Cliente | ID: " + this.id + "| Nome: " + this.name + "| Documento: " + this.document + "| Telefone: " + this.phone + System.lineSeparator();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(document, client.document);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, document);
-    }
-
-    public int compareTo(Client other) {
-        return this.id.compareTo(other.id);
+    public int compareTo(Client otherClient) {
+        return this.id.compareTo(otherClient.id);
     }
 }

@@ -1,16 +1,16 @@
+package br.com.portifolio.vehiclerentalsys;
 
-package br.com.portifolio.vehiclerentalsys.application;
+import br.com.portifolio.vehiclerentalsys.domain.model.Client;
+import br.com.portifolio.vehiclerentalsys.domain.model.Rental;
+import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
+import br.com.portifolio.vehiclerentalsys.domain.enums.Categories;
+import br.com.portifolio.vehiclerentalsys.domain.exception.ClientException;
+import br.com.portifolio.vehiclerentalsys.domain.exception.VehicleException;
+import br.com.portifolio.vehiclerentalsys.repository.*;
 
-import br.com.portifolio.vehiclerentalsys.model.entities.Client;
-import br.com.portifolio.vehiclerentalsys.model.entities.Vehicle;
-import br.com.portifolio.vehiclerentalsys.model.enums.Categories;
-import br.com.portifolio.vehiclerentalsys.model.exception.ClientException;
-import br.com.portifolio.vehiclerentalsys.model.exception.VehicleException;
-import br.com.portifolio.vehiclerentalsys.model.interfaces.ClientInterface;
-import br.com.portifolio.vehiclerentalsys.model.interfaces.VehicleInterface;
-import br.com.portifolio.vehiclerentalsys.repository.ClientRepository;
-import br.com.portifolio.vehiclerentalsys.repository.VehicleRepository;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -19,8 +19,9 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
-        VehicleInterface vehicleRepo = new VehicleRepository();
-        ClientInterface clientRepo = new ClientRepository();
+        VehicleRepositoryInterface vehicleRepo = new InMemoryVehicleRepository();
+        ClientRepositoryInterface clientRepo = new InMemoryClientRepository();
+        RentalRepositoryInterface rentalRepo = new inMemoryRentalRepository();
 
         try (Scanner input = new Scanner(System.in)) {
             boolean running = true;
@@ -40,7 +41,7 @@ public class Main {
                         removeClient(input, clientRepo);
                         break;
                     case 3:
-                        findClientByName(input, clientRepo);
+                        findClientById(input, clientRepo);
                         break;
                     case 4:
                         listClients(clientRepo);
@@ -52,10 +53,14 @@ public class Main {
                         removeVehicle(input, vehicleRepo);
                         break;
                     case 7:
-                        findVehicleByName(input, vehicleRepo);
+                        findVehicleByPlate(input, vehicleRepo);
                         break;
                     case 8:
                         listVehicles(vehicleRepo);
+                        break;
+                    case 9:
+                        addRental(input, clientRepo, vehicleRepo, rentalRepo);
+                        break;
                 }
             }
         }
@@ -64,9 +69,7 @@ public class Main {
 
     public static void menu() {
         System.out.println();
-        System.out.printf("=========================" + System.lineSeparator()
-                + "       MENU PRINCIPAL" + System.lineSeparator()
-                + "=========================" + System.lineSeparator());
+        System.out.printf("=========================" + System.lineSeparator() + "       MENU PRINCIPAL" + System.lineSeparator() + "=========================" + System.lineSeparator());
         System.out.println("1. Cadastrar cliente.");
         System.out.println("2. Remover cliente.");
         System.out.println("3. Buscar cliente.");
@@ -75,11 +78,16 @@ public class Main {
         System.out.println("5. Cadastrar veiculo.");
         System.out.println("6. Remover veiculo.");
         System.out.println("7. Buscar veiculo.");
-        System.out.println("8. Listar veiculos");
+        System.out.println("8. Listar veiculos.");
         System.out.println("----------------------");
+        System.out.println("9. Alugar veiculo.");
         System.out.println("0. Sair.");
         System.out.print(System.lineSeparator() + "Escolha uma das opcoes acima: ");
     }
+
+    /**
+     * Validation
+     **/
 
     public static int intValidation(Scanner input) {
         while (true) {
@@ -114,7 +122,11 @@ public class Main {
         }
     }
 
-    public static void addVehicle(Scanner input, VehicleInterface vehicleRepo) {
+    /**
+     * Vehicle Methods
+     **/
+
+    public static void addVehicle(Scanner input, VehicleRepositoryInterface vehicleRepo) {
         System.out.println();
         System.out.print("ID: ");
         int id = intValidation(input);
@@ -122,21 +134,22 @@ public class Main {
         String model = input.nextLine();
         System.out.print("Marca: ");
         String mark = input.nextLine();
-        System.out.print("Preco: ");
-        double price = doubleValidation(input);
         System.out.print("Placa: ");
         String plate = input.nextLine();
         System.out.print("Categoria: ");
         Categories categories = validationEnum(input);
+        System.out.print("Preco/Dia: ");
+        double price = doubleValidation(input);
+
         try {
-            Vehicle vehicle = new Vehicle(id, model, mark, price, plate, false, categories);
+            Vehicle vehicle = new Vehicle(id, model, mark, plate, categories, price);
             vehicleRepo.addVehicle(vehicle);
         } catch (VehicleException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void removeVehicle(Scanner input, VehicleInterface vehicleRepo) {
+    public static void removeVehicle(Scanner input, VehicleRepositoryInterface vehicleRepo) {
         System.out.print("Por favor, insira o modelo do carro que deseja remover: ");
         String model = input.nextLine();
         try {
@@ -146,18 +159,18 @@ public class Main {
         }
     }
 
-    public static void findVehicleByName(Scanner input, VehicleInterface vehicleRepo) {
+    public static void findVehicleByPlate(Scanner input, VehicleRepositoryInterface vehicleRepo) {
         System.out.println("Insira o nome do veiculo que deseja: ");
         String name = input.nextLine();
         try {
-            Vehicle vehicle = vehicleRepo.findVehicleByName(name);
+            Vehicle vehicle = vehicleRepo.findVehicleByPlate(name);
             System.out.println(vehicle);
         } catch (VehicleException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void listVehicles(VehicleInterface vehicleRepo) {
+    public static void listVehicles(VehicleRepositoryInterface vehicleRepo) {
         try {
             List<Vehicle> vehicles = vehicleRepo.listVehicles();
             for (Vehicle vehicle : vehicles) {
@@ -168,7 +181,11 @@ public class Main {
         }
     }
 
-    public static void addClient(Scanner input, ClientInterface clientRepo) {
+    /**
+     * Client Methods
+     **/
+
+    public static void addClient(Scanner input, ClientRepositoryInterface clientRepo) {
         System.out.println();
         System.out.print("ID: ");
         int id = intValidation(input);
@@ -186,29 +203,29 @@ public class Main {
         }
     }
 
-    public static void removeClient(Scanner input, ClientInterface clientRepo) {
+    public static void removeClient(Scanner input, ClientRepositoryInterface clientRepo) {
         System.out.print("Por favor, insira o nome que deseja remover: ");
-        String name = input.nextLine();
+        int id = input.nextInt();
         try {
-            clientRepo.removeClient(name);
+            clientRepo.removeClient(id);
         } catch (ClientException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void findClientByName(Scanner input, ClientInterface clientRepo) {
+    public static void findClientById(Scanner input, ClientRepositoryInterface clientRepo) {
         System.out.print("Insira o nome que deseja: ");
-        String name = input.nextLine();
+        int id = input.nextInt();
         System.out.println();
         try {
-            Client client = clientRepo.findClientByName(name);
+            Client client = clientRepo.findClientById(id);
             System.out.println(client);
         } catch (ClientException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void listClients(ClientInterface clientRepo) {
+    public static void listClients(ClientRepositoryInterface clientRepo) {
         try {
             Set<Client> clients = clientRepo.listClients();
             System.out.println(clients);
@@ -216,4 +233,33 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     * Rental Methods
+     **/
+
+    public static void addRental(Scanner input, ClientRepositoryInterface clientRepo, VehicleRepositoryInterface vehicleRepo, RentalRepositoryInterface rentalRepo) {
+        System.out.println();
+        System.out.print("ID: ");
+        int rentalId = intValidation(input);
+        System.out.println("Data de saida registrada.");
+        LocalDate departureDate = LocalDate.now();
+        System.out.print("Data de entrada: ");
+        String dateOfEntry = input.nextLine();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate entryDate = LocalDate.parse(dateOfEntry, dtf);
+        try {
+            System.out.print("Informe o ID do cliente: ");
+            int id = intValidation(input);
+            Client client = clientRepo.findClientById(id);
+            System.out.print("Informe a placa do veiculo: ");
+            String plate = input.nextLine();
+            Vehicle vehicle = vehicleRepo.findVehicleByPlate(plate);
+            Rental rental = new Rental(rentalId, departureDate, entryDate, client, vehicle);
+            rentalRepo.addRental(rental);
+        } catch (ClientException | VehicleException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
