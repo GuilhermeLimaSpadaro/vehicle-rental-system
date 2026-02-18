@@ -64,10 +64,13 @@ public class Main {
                         break;
                     case 10:
                         removeRental(input, rentalRepo);
+                        break;
                     case 11:
                         findRentalById(input, rentalRepo);
+                        break;
                     case 12:
                         listRental(rentalRepo);
+                        break;
                 }
             }
         }
