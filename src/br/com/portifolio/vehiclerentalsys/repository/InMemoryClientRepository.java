@@ -20,6 +20,7 @@ public class InMemoryClientRepository implements ClientRepositoryInterface {
         return this.clientList;
     }
 
+    @Override
     public void add(Client client) throws ClientException {
         if (this.clientList.contains(client)) {
             throw new ClientException("Cliente ja cadastrado.");
@@ -27,29 +28,25 @@ public class InMemoryClientRepository implements ClientRepositoryInterface {
         this.clientList.add(client);
     }
 
+    @Override
     public void removeClient(int id) throws ClientException {
         Client find = this.findClientById(id);
         this.clientList.remove(find);
     }
 
+    @Override
     public Client findClientById(int id) throws ClientException {
-        if (this.clientList.isEmpty()) {
-            throw new ClientException("Lista nao pode ser vazia!");
-        } else {
-            for (Client clientObj : this.clientList) {
-                if (clientObj.getId().equals(id)) {
-                    return clientObj;
-                }
+        for (Client clientObj : this.clientList) {
+            if (clientObj.getId().equals(id)) {
+                return clientObj;
             }
 
-            throw new ClientException("Cadastro nao encontrado! ID: " + id);
         }
+        throw new ClientException("Cadastro nao encontrado! ID: " + id);
     }
 
-    public Set<Client> listClients() throws ClientException {
-        if (this.clientList.isEmpty()) {
-            throw new ClientException("Lista nao pode ser vazia!");
-        }
+    @Override
+    public Set<Client> listClients(){
         return clientList;
     }
 }

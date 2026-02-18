@@ -23,7 +23,7 @@ public class Client implements Comparable<Client> {
     }
 
     public String toString() {
-        return "Cliente | ID: " + this.id + "| Nome: " + this.name + "| Documento: " + this.document + "| Telefone: " + this.phone + System.lineSeparator();
+        return "ID: " + this.id + " | Nome: " + this.name + " | Documento: " + this.document + " | Telefone: " + this.phone + System.lineSeparator();
     }
 
     public int compareTo(Client otherClient) {

@@ -39,7 +39,7 @@ public class Rental implements Comparable<Rental> {
     }
 
     public String toString() {
-        return "Aluguel | ID: " + this.id + " | Saida: " + String.valueOf(this.startDate) + " | Devolucao: " + String.valueOf(this.endDate) + " | Cliente: " + String.valueOf(this.client) + " | Carro: " + String.valueOf(this.vehicle) + "\n";
+        return "Contrator de aluguel | ID: " + this.id + " | Saida: " + String.valueOf(this.startDate) + " | Devolucao: " + String.valueOf(this.endDate) + " | Detalhes do cliente: " + String.valueOf(this.client) + " | Detalhes do carro: " + String.valueOf(this.vehicle) + "\n";
     }
 
     @Override

@@ -16,6 +16,7 @@ public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
         this.vehicleList = vehicleList;
     }
 
+    @Override
     public void addVehicle(Vehicle vehicle) throws VehicleException {
         if (this.vehicleList.contains(vehicle)) {
             throw new VehicleException("Veiculo ja cadastrado!");
@@ -23,29 +24,25 @@ public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
         vehicleList.add(vehicle);
     }
 
+    @Override
     public void removeVehicle(String plate) throws VehicleException {
         Vehicle vehicle = this.findVehicleByPlate(plate);
         this.vehicleList.remove(vehicle);
     }
 
+    @Override
     public Vehicle findVehicleByPlate(String plate) throws VehicleException {
-        if (this.vehicleList.isEmpty()) {
-            throw new VehicleException("Lista nao pode ser vazia!");
-        } else {
-            for (Vehicle vehicleObj : this.vehicleList) {
-                if (plate.trim().equalsIgnoreCase(vehicleObj.getPlate())) {
-                    return vehicleObj;
-                }
+        for (Vehicle vehicleObj : this.vehicleList) {
+            if (plate.trim().equalsIgnoreCase(vehicleObj.getPlate())) {
+                return vehicleObj;
             }
 
-            throw new VehicleException("Veiculo nao encontrado! Placa: " + plate);
         }
+        throw new VehicleException("Veiculo nao encontrado! Placa: " + plate);
     }
 
-    public List<Vehicle> listVehicles() throws VehicleException {
-        if (this.vehicleList.isEmpty()) {
-            throw new VehicleException("Lista nao pode estar vazia!");
-        }
+    @Override
+    public List<Vehicle> listVehicles() {
         return vehicleList;
     }
 }

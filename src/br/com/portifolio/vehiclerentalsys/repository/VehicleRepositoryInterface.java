@@ -12,7 +12,7 @@ public interface VehicleRepositoryInterface {
 
     void removeVehicle(String plate) throws VehicleException;
 
-    public Vehicle findVehicleByPlate(String plate) throws VehicleException;
+    Vehicle findVehicleByPlate(String plate) throws VehicleException;
 
-    List<Vehicle> listVehicles() throws VehicleException;
+    List<Vehicle> listVehicles();
 }

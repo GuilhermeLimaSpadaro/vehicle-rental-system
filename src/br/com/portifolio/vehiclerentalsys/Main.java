@@ -1,5 +1,7 @@
 package br.com.portifolio.vehiclerentalsys;
 
+import br.com.portifolio.vehiclerentalsys.domain.enums.Availability;
+import br.com.portifolio.vehiclerentalsys.domain.exception.RentalException;
 import br.com.portifolio.vehiclerentalsys.domain.model.Client;
 import br.com.portifolio.vehiclerentalsys.domain.model.Rental;
 import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
@@ -9,7 +11,6 @@ import br.com.portifolio.vehiclerentalsys.domain.exception.VehicleException;
 import br.com.portifolio.vehiclerentalsys.repository.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +22,7 @@ public class Main {
         Locale.setDefault(Locale.US);
         VehicleRepositoryInterface vehicleRepo = new InMemoryVehicleRepository();
         ClientRepositoryInterface clientRepo = new InMemoryClientRepository();
-        RentalRepositoryInterface rentalRepo = new inMemoryRentalRepository();
+        RentalRepositoryInterface rentalRepo = new InMemoryRentalRepository();
 
         try (Scanner input = new Scanner(System.in)) {
             boolean running = true;
@@ -61,6 +62,12 @@ public class Main {
                     case 9:
                         addRental(input, clientRepo, vehicleRepo, rentalRepo);
                         break;
+                    case 10:
+                        removeRental(input, rentalRepo);
+                    case 11:
+                        findRentalById(input, rentalRepo);
+                    case 12:
+                        listRental(rentalRepo);
                 }
             }
         }
@@ -70,18 +77,21 @@ public class Main {
     public static void menu() {
         System.out.println();
         System.out.printf("=========================" + System.lineSeparator() + "       MENU PRINCIPAL" + System.lineSeparator() + "=========================" + System.lineSeparator());
-        System.out.println("1. Cadastrar cliente.");
-        System.out.println("2. Remover cliente.");
-        System.out.println("3. Buscar cliente.");
-        System.out.println("4. Listar clientes.");
+        System.out.println("1.  Cadastrar cliente.");
+        System.out.println("2.  Remover cliente.");
+        System.out.println("3.  Buscar cliente.");
+        System.out.println("4.  Listar clientes.");
         System.out.println("----------------------");
-        System.out.println("5. Cadastrar veiculo.");
-        System.out.println("6. Remover veiculo.");
-        System.out.println("7. Buscar veiculo.");
-        System.out.println("8. Listar veiculos.");
+        System.out.println("5.  Cadastrar veiculo.");
+        System.out.println("6.  Remover veiculo.");
+        System.out.println("7.  Buscar veiculo.");
+        System.out.println("8.  Listar veiculos.");
         System.out.println("----------------------");
-        System.out.println("9. Alugar veiculo.");
-        System.out.println("0. Sair.");
+        System.out.println("9.  Alugar veiculo.");
+        System.out.println("10. Excluir aluguel");
+        System.out.println("11. Buscar aluguel");
+        System.out.println("12. Listar alugueis");
+        System.out.println("0.  Sair.");
         System.out.print(System.lineSeparator() + "Escolha uma das opcoes acima: ");
     }
 
@@ -94,8 +104,8 @@ public class Main {
             try {
                 String line = input.nextLine().trim();
                 return Integer.parseInt(line);
-            } catch (Exception var2) {
-                System.out.print("Por favor, digite um numero: ");
+            } catch (Exception e) {
+                System.out.print("Por favor, insira um numero: ");
             }
         }
     }
@@ -105,19 +115,32 @@ public class Main {
             try {
                 String line = input.nextLine().trim();
                 return Double.parseDouble(line);
-            } catch (Exception var2) {
-                System.out.print("Por favor, digite um numero: ");
+            } catch (Exception e) {
+                System.out.print("Por favor, insira um numero: ");
             }
         }
     }
 
-    public static Categories validationEnum(Scanner input) {
+    public static Categories categoriesEnum(Scanner input) {
         while (true) {
             try {
-                String line = input.nextLine().toUpperCase();
-                return Categories.valueOf(line);
-            } catch (Exception var2) {
-                System.out.print("Insira uma categoria! Car | MotorCycle | Truck: ");
+                String categories = input.nextLine().trim().toUpperCase();
+                return Categories.valueOf(categories);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Opcao invalida.");
+                System.out.println("Digite: Carro | Moto | Caminhao");
+            }
+        }
+    }
+
+    public static Availability availabilityEnum(Scanner input) {
+        while (true) {
+            try {
+                String availability = input.nextLine().trim().toUpperCase();
+                return Availability.valueOf(availability);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Opcao invalida.");
+                System.out.println("Digite: DISPONIVEL | ALUGADO | MANUTENCAO;");
             }
         }
     }
@@ -136,13 +159,14 @@ public class Main {
         String mark = input.nextLine();
         System.out.print("Placa: ");
         String plate = input.nextLine();
-        System.out.print("Categoria: ");
-        Categories categories = validationEnum(input);
         System.out.print("Preco/Dia: ");
         double price = doubleValidation(input);
-
+        System.out.print("Categoria: ");
+        Categories categories = categoriesEnum(input);
+        System.out.println("Disponibilidade: ");
+        Availability availability = availabilityEnum(input);
         try {
-            Vehicle vehicle = new Vehicle(id, model, mark, plate, categories, price);
+            Vehicle vehicle = new Vehicle(id, model, mark, plate, price, categories, availability);
             vehicleRepo.addVehicle(vehicle);
         } catch (VehicleException e) {
             System.out.println(e.getMessage());
@@ -150,7 +174,7 @@ public class Main {
     }
 
     public static void removeVehicle(Scanner input, VehicleRepositoryInterface vehicleRepo) {
-        System.out.print("Por favor, insira o modelo do carro que deseja remover: ");
+        System.out.print("Informe o modelo do carro que deseja remover: ");
         String model = input.nextLine();
         try {
             vehicleRepo.removeVehicle(model);
@@ -160,7 +184,7 @@ public class Main {
     }
 
     public static void findVehicleByPlate(Scanner input, VehicleRepositoryInterface vehicleRepo) {
-        System.out.println("Insira o nome do veiculo que deseja: ");
+        System.out.println("Informe o nome do veiculo que deseja: ");
         String name = input.nextLine();
         try {
             Vehicle vehicle = vehicleRepo.findVehicleByPlate(name);
@@ -171,14 +195,11 @@ public class Main {
     }
 
     public static void listVehicles(VehicleRepositoryInterface vehicleRepo) {
-        try {
-            List<Vehicle> vehicles = vehicleRepo.listVehicles();
-            for (Vehicle vehicle : vehicles) {
-                System.out.println(vehicle);
-            }
-        } catch (VehicleException e) {
-            System.out.println(e.getMessage());
+        List<Vehicle> vehicles = vehicleRepo.listVehicles();
+        for (Vehicle vehicle : vehicles) {
+            System.out.println(vehicle);
         }
+
     }
 
     /**
@@ -204,8 +225,8 @@ public class Main {
     }
 
     public static void removeClient(Scanner input, ClientRepositoryInterface clientRepo) {
-        System.out.print("Por favor, insira o nome que deseja remover: ");
-        int id = input.nextInt();
+        System.out.print("Informe o ID: ");
+        int id = intValidation(input);
         try {
             clientRepo.removeClient(id);
         } catch (ClientException e) {
@@ -214,8 +235,8 @@ public class Main {
     }
 
     public static void findClientById(Scanner input, ClientRepositoryInterface clientRepo) {
-        System.out.print("Insira o nome que deseja: ");
-        int id = input.nextInt();
+        System.out.print("Informe o ID: ");
+        int id = intValidation(input);
         System.out.println();
         try {
             Client client = clientRepo.findClientById(id);
@@ -226,12 +247,8 @@ public class Main {
     }
 
     public static void listClients(ClientRepositoryInterface clientRepo) {
-        try {
-            Set<Client> clients = clientRepo.listClients();
-            System.out.println(clients);
-        } catch (ClientException e) {
-            System.out.println(e.getMessage());
-        }
+        Set<Client> clients = clientRepo.listClients();
+        System.out.println(clients);
     }
 
     /**
@@ -257,9 +274,34 @@ public class Main {
             Vehicle vehicle = vehicleRepo.findVehicleByPlate(plate);
             Rental rental = new Rental(rentalId, departureDate, entryDate, client, vehicle);
             rentalRepo.addRental(rental);
-        } catch (ClientException | VehicleException e) {
+        } catch (ClientException | VehicleException | RentalException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static void removeRental(Scanner input, RentalRepositoryInterface rentalRepo) {
+        System.out.println("Informe o ID: ");
+        int id = intValidation(input);
+        try {
+            rentalRepo.removeRental(id);
+        } catch (RentalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void findRentalById(Scanner input, RentalRepositoryInterface rentalRepo) {
+        System.out.println("Informe o ID: ");
+        int id = intValidation(input);
+        try {
+            Rental rental = rentalRepo.findRentalById(id);
+            System.out.println(rental);
+        } catch (RentalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void listRental(RentalRepositoryInterface rentalRepo) {
+        System.out.println(rentalRepo.listContractsRental());
     }
 
 }

@@ -1,10 +1,17 @@
 package br.com.portifolio.vehiclerentalsys.repository;
 
+import br.com.portifolio.vehiclerentalsys.domain.exception.RentalException;
 import br.com.portifolio.vehiclerentalsys.domain.model.Rental;
+
+import java.util.Set;
 
 public interface RentalRepositoryInterface {
 
-    public void addRental(Rental rental);
+    void addRental(Rental rental) throws RentalException;
 
-    public void removeRental(Rental rental);
+    Rental findRentalById(int id) throws RentalException;
+
+    void removeRental(int id) throws RentalException;
+
+    Set<Rental> listContractsRental();
 }

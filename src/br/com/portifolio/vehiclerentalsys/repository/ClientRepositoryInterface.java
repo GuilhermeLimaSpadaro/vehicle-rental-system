@@ -7,11 +7,12 @@ import br.com.portifolio.vehiclerentalsys.domain.exception.ClientException;
 import java.util.Set;
 
 public interface ClientRepositoryInterface {
+
     void add(Client client) throws ClientException;
 
     void removeClient(int id) throws ClientException;
 
-    public Client findClientById(int id) throws ClientException;
+    Client findClientById(int id) throws ClientException;
 
-    Set<Client> listClients() throws ClientException;
+    Set<Client> listClients();
 }
