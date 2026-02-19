@@ -18,10 +18,6 @@ public class Client implements Comparable<Client> {
         return this.id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public String toString() {
         return "ID: " + this.id + " | Nome: " + this.name + " | Documento: " + this.document + " | Telefone: " + this.phone + System.lineSeparator();
     }

@@ -2,6 +2,7 @@ package br.com.portifolio.vehiclerentalsys.domain.model;
 
 import br.com.portifolio.vehiclerentalsys.domain.enums.Availability;
 import br.com.portifolio.vehiclerentalsys.domain.enums.Categories;
+import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 
 import java.util.Objects;
 
@@ -12,9 +13,9 @@ public class Vehicle {
     private final String plate;
     private final Double pricePerDay;
     private final Categories categories;
-    private final Availability availability;
+    private Availability availability;
 
-    public Vehicle(Integer id, String model, String mark, String plate, Double pricePerDay, Categories categories, Availability availability) {
+    public Vehicle(Integer id, String model, String mark, String plate, Double pricePerDay, Categories categories, Availability availability) throws DomainException {
         this.id = id;
         this.model = model;
         this.mark = mark;
@@ -25,15 +26,35 @@ public class Vehicle {
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public String getModel() {
-        return this.model;
+        return model;
+    }
+
+    public String getMark() {
+        return mark;
     }
 
     public String getPlate() {
-        return this.plate;
+        return plate;
+    }
+
+    public Double getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public Categories getCategories() {
+        return categories;
+    }
+
+    public Availability getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(Availability availability) {
+        this.availability = availability;
     }
 
     @Override

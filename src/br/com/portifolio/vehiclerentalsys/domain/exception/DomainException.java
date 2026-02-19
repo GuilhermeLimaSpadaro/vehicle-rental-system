@@ -1,7 +1,7 @@
 package br.com.portifolio.vehiclerentalsys.domain.exception;
 
-public class ClientException extends Exception {
-    public ClientException(String message) {
+public class DomainException extends Exception {
+    public DomainException(String message) {
         super(message);
     }
 }

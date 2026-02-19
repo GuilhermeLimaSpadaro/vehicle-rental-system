@@ -22,22 +22,6 @@ public class Rental implements Comparable<Rental> {
         return this.id;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public Client getClient() {
-        return this.client;
-    }
-
-    public Vehicle getVehicle() {
-        return this.vehicle;
-    }
-
     public String toString() {
         return "Contrator de aluguel | ID: " + this.id + " | Saida: " + String.valueOf(this.startDate) + " | Devolucao: " + String.valueOf(this.endDate) + " | Detalhes do cliente: " + String.valueOf(this.client) + " | Detalhes do carro: " + String.valueOf(this.vehicle) + "\n";
     }
