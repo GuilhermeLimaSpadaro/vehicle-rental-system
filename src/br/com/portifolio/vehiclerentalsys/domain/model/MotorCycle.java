@@ -9,4 +9,5 @@ public class MotorCycle extends Vehicle {
     public MotorCycle(Integer id, String model, String mark, String plate, Double pricePerDay, Categories categories, Availability availability) throws DomainException {
         super(id, model, mark, plate, pricePerDay, categories, availability);
     }
+
 }

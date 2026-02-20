@@ -6,7 +6,6 @@ import br.com.portifolio.vehiclerentalsys.domain.model.Rental;
 import java.util.Set;
 
 public interface RentalRepositoryInterface {
-
     void addRental(Rental rental) throws RepositoryException;
 
     Rental findRentalById(int id) throws RepositoryException;

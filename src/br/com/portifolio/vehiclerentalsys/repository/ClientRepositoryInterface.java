@@ -1,4 +1,3 @@
-
 package br.com.portifolio.vehiclerentalsys.repository;
 
 import br.com.portifolio.vehiclerentalsys.domain.model.Client;

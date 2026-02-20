@@ -1,6 +1,7 @@
 package br.com.portifolio.vehiclerentalsys.domain.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class Rental implements Comparable<Rental> {
@@ -22,8 +23,21 @@ public class Rental implements Comparable<Rental> {
         return this.id;
     }
 
+    @Override
     public String toString() {
-        return "Contrator de aluguel | ID: " + this.id + " | Saida: " + String.valueOf(this.startDate) + " | Devolucao: " + String.valueOf(this.endDate) + " | Detalhes do cliente: " + String.valueOf(this.client) + " | Detalhes do carro: " + String.valueOf(this.vehicle) + "\n";
+        return "Contrator de aluguel | ID: " + this.id + " | Saida: " + this.startDate + " | Devolucao: " + this.endDate + " | Detalhes do cliente: " + this.client + " | Detalhes do carro: " + this.vehicle + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Rental rental = (Rental) o;
+        return Objects.equals(id, rental.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     @Override

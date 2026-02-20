@@ -1,11 +1,9 @@
-
 package br.com.portifolio.vehiclerentalsys.repository;
 
 import br.com.portifolio.vehiclerentalsys.domain.exception.RepositoryException;
 import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
-import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 
-import java.util.List;
+import java.util.Set;
 
 public interface VehicleRepositoryInterface {
 
@@ -15,5 +13,5 @@ public interface VehicleRepositoryInterface {
 
     Vehicle findVehicleByPlate(String plate) throws RepositoryException;
 
-    List<Vehicle> listVehicles();
+    Set<Vehicle> listVehicles();
 }

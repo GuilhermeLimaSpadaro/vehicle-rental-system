@@ -6,7 +6,7 @@ import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 
 import java.util.Objects;
 
-public class Vehicle {
+public class Vehicle implements Comparable<Vehicle> {
     private final Integer id;
     private final String model;
     private final String mark;
@@ -25,32 +25,8 @@ public class Vehicle {
         this.availability = availability;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public String getMark() {
-        return mark;
-    }
-
     public String getPlate() {
         return plate;
-    }
-
-    public Double getPricePerDay() {
-        return pricePerDay;
-    }
-
-    public Categories getCategories() {
-        return categories;
-    }
-
-    public Availability getAvailability() {
-        return availability;
     }
 
     public void setAvailability(Availability availability) {
@@ -68,12 +44,18 @@ public class Vehicle {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return Objects.equals(id, vehicle.id) && Objects.equals(model, vehicle.model) && Objects.equals(plate, vehicle.plate);
+        return Objects.equals(plate, vehicle.plate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, model, plate);
+        return Objects.hashCode(plate);
+    }
+
+
+    @Override
+    public int compareTo(Vehicle other) {
+        return this.plate.compareTo(other.getPlate());
     }
 }
 

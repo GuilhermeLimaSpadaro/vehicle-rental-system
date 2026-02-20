@@ -7,18 +7,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class InMemoryClientRepository implements ClientRepositoryInterface {
-    private Set<Client> clientList = new TreeSet<>();
 
-    public InMemoryClientRepository() {
-    }
-
-    public InMemoryClientRepository(Set<Client> clientList) {
-        this.clientList = clientList;
-    }
-
-    public Set<Client> getClientList() {
-        return this.clientList;
-    }
+    private final Set<Client> clientList = new TreeSet<>();
 
     @Override
     public void add(Client client) throws RepositoryException {
@@ -42,11 +32,11 @@ public class InMemoryClientRepository implements ClientRepositoryInterface {
             }
 
         }
-        throw new RepositoryException("Cadastro nao encontrado! ID: " + id);
+        throw new RepositoryException("Cliente nao encontrado! ID: " + id);
     }
 
     @Override
-    public Set<Client> listClients(){
+    public Set<Client> listClients() {
         return clientList;
     }
 }

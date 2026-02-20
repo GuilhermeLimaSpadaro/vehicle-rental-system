@@ -2,20 +2,13 @@ package br.com.portifolio.vehiclerentalsys.repository;
 
 import br.com.portifolio.vehiclerentalsys.domain.exception.RepositoryException;
 import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
-import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
-    private List<Vehicle> vehicleList = new ArrayList<>();
 
-    public InMemoryVehicleRepository() {
-    }
-
-    public InMemoryVehicleRepository(List<Vehicle> vehicleList) {
-        this.vehicleList = vehicleList;
-    }
+    private final Set<Vehicle> vehicleList = new LinkedHashSet<>();
 
     @Override
     public void addVehicle(Vehicle vehicle) throws RepositoryException {
@@ -43,7 +36,7 @@ public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
     }
 
     @Override
-    public List<Vehicle> listVehicles() {
+    public Set<Vehicle> listVehicles() {
         return vehicleList;
     }
 }

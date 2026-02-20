@@ -13,7 +13,7 @@ public class ScannerUtils {
                 String line = input.nextLine().trim();
                 return Integer.parseInt(line);
             } catch (Exception e) {
-                System.out.print("Por favor, insira um numero: ");
+                System.out.print("Digite um numero: ");
             }
         }
     }
@@ -24,7 +24,7 @@ public class ScannerUtils {
                 String line = input.nextLine().trim();
                 return Double.parseDouble(line);
             } catch (Exception e) {
-                System.out.print("Por favor, insira um numero: ");
+                System.out.print("Digite um numero: ");
             }
         }
     }
@@ -48,7 +48,7 @@ public class ScannerUtils {
                 return Availability.valueOf(availability);
             } catch (IllegalArgumentException e) {
                 System.out.println("Opcao invalida.");
-                System.out.println("Digite: DISPONIVEL | ALUGADO | MANUTENCAO;");
+                System.out.println("Digite: Disponivel | Alugado | Manutencao;");
             }
         }
     }

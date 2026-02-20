@@ -8,8 +8,8 @@ import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
 import br.com.portifolio.vehiclerentalsys.repository.VehicleRepositoryInterface;
 import br.com.portifolio.vehiclerentalsys.utils.ScannerUtils;
 
-import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class VehicleController {
 
@@ -59,7 +59,7 @@ public class VehicleController {
     }
 
     public void listVehicles(VehicleRepositoryInterface vehicleRepo) {
-        List<Vehicle> vehicles = vehicleRepo.listVehicles();
+        Set<Vehicle> vehicles = vehicleRepo.listVehicles();
         if (vehicles.isEmpty()) {
             System.out.println("Lista de veiculos vazia!");
         } else {

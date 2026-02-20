@@ -18,10 +18,12 @@ public class Client implements Comparable<Client> {
         return this.id;
     }
 
+    @Override
     public String toString() {
         return "ID: " + this.id + " | Nome: " + this.name + " | Documento: " + this.document + " | Telefone: " + this.phone + System.lineSeparator();
     }
 
+    @Override
     public int compareTo(Client otherClient) {
         return this.id.compareTo(otherClient.id);
     }

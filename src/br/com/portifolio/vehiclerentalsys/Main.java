@@ -3,22 +3,12 @@ package br.com.portifolio.vehiclerentalsys;
 import br.com.portifolio.vehiclerentalsys.controller.ClientController;
 import br.com.portifolio.vehiclerentalsys.controller.RentalController;
 import br.com.portifolio.vehiclerentalsys.controller.VehicleController;
-import br.com.portifolio.vehiclerentalsys.domain.enums.Availability;
-import br.com.portifolio.vehiclerentalsys.domain.model.Client;
-import br.com.portifolio.vehiclerentalsys.domain.model.Rental;
-import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
-import br.com.portifolio.vehiclerentalsys.domain.enums.Categories;
-import br.com.portifolio.vehiclerentalsys.domain.exception.RepositoryException;
 import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 import br.com.portifolio.vehiclerentalsys.repository.*;
 import br.com.portifolio.vehiclerentalsys.utils.ScannerUtils;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws DomainException {
