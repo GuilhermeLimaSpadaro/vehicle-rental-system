@@ -3,15 +3,15 @@ package br.com.portifolio.vehiclerentalsys;
 import br.com.portifolio.vehiclerentalsys.controller.ClientController;
 import br.com.portifolio.vehiclerentalsys.controller.RentalController;
 import br.com.portifolio.vehiclerentalsys.controller.VehicleController;
-import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 import br.com.portifolio.vehiclerentalsys.repository.*;
+import br.com.portifolio.vehiclerentalsys.service.RentalService;
 import br.com.portifolio.vehiclerentalsys.utils.ScannerUtils;
 
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws DomainException {
+    public static void main(String[] args) {
         Locale.setDefault(Locale.US);
         VehicleRepositoryInterface vehicleRepo = new InMemoryVehicleRepository();
         ClientRepositoryInterface clientRepo = new InMemoryClientRepository();
@@ -19,6 +19,7 @@ public class Main {
         ClientController clientController = new ClientController();
         RentalController rentalController = new RentalController();
         VehicleController vehicleController = new VehicleController();
+        RentalService rentalService = new RentalService();
 
         try (Scanner input = new Scanner(System.in)) {
             boolean running = true;
@@ -65,7 +66,10 @@ public class Main {
                         rentalController.findRentalById(input, rentalRepo);
                         break;
                     case 12:
-                        rentalController.listRental(rentalRepo);
+                        rentalController.listRental(rentalRepo, rentalService);
+                        break;
+                    case 13:
+                        rentalController.vehicleReturn(input, rentalService, rentalRepo);
                         break;
                 }
             }
@@ -88,8 +92,9 @@ public class Main {
         System.out.println("----------------------");
         System.out.println("9.  Alugar veiculo.");
         System.out.println("10. Excluir aluguel");
-        System.out.println("11. Buscar aluguel");
-        System.out.println("12. Listar alugueis");
+        System.out.println("11. Buscar aluguel.");
+        System.out.println("12. Listar alugueis.");
+        System.out.println("13. Registrar devolucao.");
         System.out.println("0.  Sair.");
         System.out.print(System.lineSeparator() + "Escolha uma das opcoes acima: ");
     }

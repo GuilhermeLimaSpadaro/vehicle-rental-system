@@ -27,7 +27,7 @@ public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
     @Override
     public Vehicle findVehicleByPlate(String plate) throws RepositoryException {
         for (Vehicle vehicleObj : this.vehicleList) {
-            if (plate.trim().equalsIgnoreCase(vehicleObj.getPlate())) {
+            if (plate.trim().equals(vehicleObj.getPlate())) {
                 return vehicleObj;
             }
 

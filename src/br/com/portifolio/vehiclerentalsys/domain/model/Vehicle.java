@@ -16,10 +16,25 @@ public class Vehicle implements Comparable<Vehicle> {
     private Availability availability;
 
     public Vehicle(Integer id, String model, String mark, String plate, Double pricePerDay, Categories categories, Availability availability) throws DomainException {
+        if (id <= 0){
+            throw new DomainException("ID invalido. Deve ser maior que zero.");
+        }
         this.id = id;
+        if (model == null||model.isBlank()){
+            throw new DomainException("Valor nao pode ser nulo!");
+        }
         this.model = model;
+        if (mark == null||mark.isBlank()){
+            throw new DomainException("Valor nao pode ser nulo!");
+        }
         this.mark = mark;
+        if (plate == null||!plate.matches("[A-Z]{3}-[0-9]{4}|[A-Z]{3}[0-9][A-Z][0-9]{2}")){
+            throw new DomainException("Placa invalida. Tente novamente: ");
+        }
         this.plate = plate;
+        if (pricePerDay == null||pricePerDay <= 0){
+            throw new DomainException("Valor nao pode ser nulo!");
+        }
         this.pricePerDay = pricePerDay;
         this.categories = categories;
         this.availability = availability;
@@ -29,6 +44,10 @@ public class Vehicle implements Comparable<Vehicle> {
         return plate;
     }
 
+    public Double getPricePerDay() {
+        return pricePerDay;
+    }
+
     public void setAvailability(Availability availability) {
         this.availability = availability;
     }
@@ -36,8 +55,8 @@ public class Vehicle implements Comparable<Vehicle> {
     @Override
     public String toString() {
         return "ID: " + this.id +
-                " | Modelo: " + this.model + " | Marca: " + this.mark + " | Placa: " + this.plate + " | Preco/Dia" + this.pricePerDay +
-                " | Categorias" + this.categories + " | Disponibilidade: " + this.availability + System.lineSeparator();
+                " | Modelo: " + this.model + " | Marca: " + this.mark + " | Placa: " + this.plate + " | Preco/Dia: " + this.pricePerDay +
+                " | Categorias: " + this.categories + " | Disponibilidade: " + this.availability + System.lineSeparator();
     }
 
     @Override

@@ -10,9 +10,8 @@ public class InMemoryRentalRepository implements RentalRepositoryInterface {
 
     private final Set<Rental> setRental = new TreeSet<>();
 
-    @Override
-    public String toString() {
-        return "Aluguel: " + this.setRental + "\n";
+    public Set<Rental> getSetRental() {
+        return setRental;
     }
 
     @Override

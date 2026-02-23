@@ -13,44 +13,47 @@ import java.util.Set;
 
 public class VehicleController {
 
-    public void addVehicle(Scanner input, VehicleRepositoryInterface vehicleRepo) throws DomainException {
+    public void addVehicle(Scanner input, VehicleRepositoryInterface vehicleRepo) {
         System.out.println();
-        System.out.print("ID: ");
-        int id = ScannerUtils.intValidation(input);
-        System.out.print("Modelo: ");
-        String model = input.nextLine();
-        System.out.print("Marca: ");
-        String mark = input.nextLine();
-        System.out.print("Placa: ");
-        String plate = input.nextLine();
-        System.out.print("Preco/Dia: ");
-        double price = ScannerUtils.doubleValidation(input);
-        System.out.print("Categoria: ");
-        Categories categories = ScannerUtils.categoriesEnum(input);
-        System.out.println("Disponibilidade: ");
-        Availability availability = ScannerUtils.availabilityEnum(input);
-        Vehicle vehicle = new Vehicle(id, model, mark, plate, price, categories, availability);
+
         try {
+            System.out.print("ID: ");
+            int id = ScannerUtils.intValidation(input);
+            System.out.print("Modelo: ");
+            String model = input.nextLine();
+            System.out.print("Marca: ");
+            String mark = input.nextLine();
+            System.out.print("Placa: ");
+            String plate = input.nextLine();
+            System.out.print("Preco/Dia: ");
+            double pricePerDay = ScannerUtils.doubleValidation(input);
+            System.out.print("Categoria: ");
+            Categories categories = ScannerUtils.categoriesEnum(input);
+            System.out.print("Disponibilidade: ");
+            Availability availability = ScannerUtils.availabilityEnum(input);
+            Vehicle vehicle = new Vehicle(id, model, mark, plate, pricePerDay, categories, availability);
             vehicleRepo.addVehicle(vehicle);
-        } catch (RepositoryException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (RepositoryException | DomainException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public void removeVehicle(Scanner input, VehicleRepositoryInterface vehicleRepo) {
-        System.out.print("Informe o modelo do carro que deseja remover: ");
-        String model = input.nextLine();
         try {
-            vehicleRepo.removeVehicle(model);
+            System.out.print("Informe a placa do carro que deseja remover: ");
+            String plate = input.nextLine();
+
+            vehicleRepo.removeVehicle(plate);
         } catch (RepositoryException e) {
             System.out.println(e.getMessage());
         }
     }
 
     public void findVehicleByPlate(Scanner input, VehicleRepositoryInterface vehicleRepo) {
-        System.out.println("Informe a placa do veiculo que deseja: ");
-        String plate = input.nextLine();
         try {
+            System.out.print("Informe a placa do veiculo que deseja: ");
+            String plate = input.nextLine();
             Vehicle vehicle = vehicleRepo.findVehicleByPlate(plate);
             System.out.println(vehicle);
         } catch (RepositoryException e) {
