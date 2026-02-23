@@ -1,128 +1,89 @@
 # 🚗 Vehicle Rental System
 
-## 📌 Sobre o Projeto
+Sistema de aluguel de veículos desenvolvido em Java, com arquitetura em camadas e armazenamento em memória.
 
-Este é um projeto desenvolvido em **Java** com o objetivo de simular um sistema de **aluguel de veículos**, aplicando conceitos fundamentais de programação orientada a objetos utilizados no mercado.
+## 📋 Funcionalidades
 
-O foco principal é praticar **estruturação profissional de código**, organização em camadas e evolução progressiva do sistema.
+### Clientes
+- Cadastrar, remover, buscar e listar clientes
 
----
+### Veículos
+- Cadastrar, remover, buscar e listar veículos
+- Categorias: Carro, Moto, Caminhão
+- Disponibilidade: Disponível, Alugado, Manutenção
 
-## 🎯 Objetivos do Projeto
+### Aluguéis
+- Registrar, remover, buscar e listar contratos de aluguel
+- Cálculo automático do valor total
+- Registro de devolução com cálculo de multa por atraso (10% ao dia)
 
-* Praticar **Programação Orientada a Objetos (POO)**
-* Desenvolver lógica de sistemas empresariais
-* Aprender organização profissional de projetos
-* Evoluir gradualmente com novos conceitos
-
----
-
-## 🧠 Conceitos Aplicados
-
-### ✔️ Programação Orientada a Objetos
-
-* Encapsulamento
-* Herança
-* Polimorfismo
-* Composição
-
-### ✔️ Estruturas de Dados
-
-* List
-* Set
-* Map
-
-### ✔️ Recursos da Linguagem
-
-* Generics
-* Enum
-* Interfaces
-
-### ✔️ Organização Arquitetural
-
-* Separação em camadas (Entities, Services, Repositories)
-* Estrutura modular semelhante a projetos reais
-
----
-
-## 🏗️ Estrutura do Projeto
+## 🏗️ Arquitetura
 
 ```
 src/
- ├── entities
- │    ├── Vehicle (classe base)
- │    ├── Car
- │    ├── Motorcycle
- │    ├── Truck
- │    ├── Client
- │    └── Rental
- │
- ├── services
- ├── repositories
- └── application (Main)
+├── controller/       # Camada de interface com o usuário
+├── service/          # Regras de negócio
+├── repository/       # Persistência em memória
+├── domain/
+│   ├── model/        # Entidades do sistema
+│   ├── enums/        # Categorias e disponibilidade
+│   └── exception/    # Exceções de domínio e repositório
+└── utils/            # Utilitários de entrada
 ```
 
----
+## ✅ Conceitos Aplicados
 
-## 🚀 Funcionalidades Atuais
+- Separação de responsabilidades (Controller → Service → Repository)
+- Interfaces para repositórios
+- Exceções checked customizadas (`DomainException`, `RepositoryException`)
+- Validações no construtor das entidades
+- Enums para tipos e disponibilidade
+- Generics com `Set`, `TreeSet` e `LinkedHashSet`
+- `Comparable` para ordenação das entidades
+- `equals` e `hashCode` nas entidades
 
-* Cadastro de clientes
-* Cadastro de veículos
-* Registro de aluguéis
-* Associação entre cliente e veículo
-* Listagem de registros
-* Remoção e atualização de dados
+## 🔧 Validações
 
----
+| Entidade | Campo | Validação |
+|---------|-------|-----------|
+| Cliente | ID | Maior que zero |
+| Cliente | Nome | Não nulo e não vazio |
+| Cliente | CPF | Exatamente 11 caracteres |
+| Cliente | Telefone | Exatamente 11 caracteres |
+| Veículo | ID | Maior que zero |
+| Veículo | Modelo/Marca | Não nulo e não vazio |
+| Veículo | Placa | Formato antigo (AAA-0000) ou Mercosul (AAA0A00) |
+| Veículo | Preço/Dia | Não nulo e maior que zero |
+| Aluguel | ID | Maior que zero |
+| Aluguel | Data devolução | Deve ser posterior à data de início |
 
-## 🔮 Próximas Evoluções
-
-* Cálculo automático do valor do aluguel
-* Implementação de multa por atraso
-* Persistência em banco de dados (JDBC)
-* Testes unitários
-* Aplicação de programação funcional (Streams e Lambda futuramente)
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-* Java
-* Programação Orientada a Objetos
-* Coleções Java
-
----
-
-## 📚 Objetivo Educacional
-
-Este projeto faz parte de um processo contínuo de aprendizado com foco em:
-
-* Desenvolvimento backend
-* Sistemas empresariais
-* Boas práticas utilizadas no mercado
-
----
-
-## 👨‍💻 Autor
-
-Projeto desenvolvido para fins de estudo e evolução profissional em **Java Backend**.
-
----
-
-## ⭐ Como Executar
+## ▶️ Como Executar
 
 1. Clone o repositório
-2. Abra em uma IDE (IntelliJ, Eclipse, etc.)
-3. Execute a classe `Main`
+2. Abra em sua IDE favorita (IntelliJ, Eclipse)
+3. Execute a classe `Main.java`
+4. Navegue pelo menu interativo no terminal
 
----
+## 🧾 Exemplo de Uso
 
-## 📌 Status do Projeto
+```
+=========================
+       MENU PRINCIPAL
+=========================
+1.  Cadastrar cliente.
+2.  Remover cliente.
+...
+9.  Alugar veiculo.
+13. Registrar devolucao.
+0.  Sair.
+```
 
-🚧 Em desenvolvimento contínuo
+## 🛠️ Tecnologias
 
-Novas funcionalidades serão adicionadas conforme evolução dos estudos.
+- Java 17+
+- Armazenamento em memória (InMemory)
 
----
+## 📌 Observações
 
-**Se este projeto te ajudou, deixe uma ⭐ no repositório!**
+- Dados são perdidos ao encerrar o programa (sem persistência em banco)
+- Projeto acadêmico com foco em POO e boas práticas de design
