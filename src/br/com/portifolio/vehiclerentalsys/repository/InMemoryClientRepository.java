@@ -26,12 +26,10 @@ public class InMemoryClientRepository implements ClientRepositoryInterface {
 
     @Override
     public Client findClientById(int id) throws RepositoryException {
-        for (Client clientObj : this.clientList) {
-            if (clientObj.getId().equals(id)) {
-                return clientObj;
-            }
-
-        }
+        clientList.stream()
+                .filter(x -> x.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RepositoryException("Cliente nao encontrado."));
         throw new RepositoryException("Cliente nao encontrado! ID: " + id);
     }
 

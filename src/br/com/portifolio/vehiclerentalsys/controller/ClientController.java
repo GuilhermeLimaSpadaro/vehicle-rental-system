@@ -4,6 +4,7 @@ import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 import br.com.portifolio.vehiclerentalsys.domain.exception.RepositoryException;
 import br.com.portifolio.vehiclerentalsys.domain.model.Client;
 import br.com.portifolio.vehiclerentalsys.repository.ClientRepositoryInterface;
+import br.com.portifolio.vehiclerentalsys.utils.ListUtils;
 import br.com.portifolio.vehiclerentalsys.utils.ScannerUtils;
 
 import java.util.Scanner;
@@ -53,12 +54,10 @@ public class ClientController {
 
     public void listClients(ClientRepositoryInterface clientRepo) {
         Set<Client> clients = clientRepo.listClients();
-        if (clients.isEmpty()) {
-            System.out.println("Lista de clientes vazia!");
-        } else {
-            for (Client client : clients) {
-                System.out.println(client);
-            }
+        try {
+            ListUtils.list(clients);
+        } catch (DomainException e) {
+            System.out.println(e.getMessage());
+        }
         }
     }
-}

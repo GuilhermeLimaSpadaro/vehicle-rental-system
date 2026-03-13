@@ -66,7 +66,7 @@ public class Main {
                         rentalController.findRentalById(input, rentalRepo);
                         break;
                     case 12:
-                        rentalController.listRental(rentalRepo, rentalService);
+                        rentalController.listTotalRental(rentalRepo, rentalService);
                         break;
                     case 13:
                         rentalController.vehicleReturn(input, rentalService, rentalRepo);

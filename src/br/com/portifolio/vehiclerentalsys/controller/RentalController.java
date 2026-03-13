@@ -65,7 +65,7 @@ public class RentalController {
         }
     }
 
-    public void listRental(RentalRepositoryInterface rentalRepo, RentalService rentalService) {
+    public void listTotalRental(RentalRepositoryInterface rentalRepo, RentalService rentalService) {
         Set<Rental> rentals = rentalRepo.listContractsRental();
         if (rentals.isEmpty()) {
             System.out.println("Lista de alugueis vazia!");

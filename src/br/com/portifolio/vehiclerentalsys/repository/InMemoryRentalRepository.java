@@ -30,17 +30,14 @@ public class InMemoryRentalRepository implements RentalRepositoryInterface {
 
     @Override
     public Rental findRentalById(int id) throws RepositoryException {
-        for (Rental contractsRental : this.setRental) {
-            if (contractsRental.getId().equals(id)) {
-                return contractsRental;
-            }
-        }
-        throw new RepositoryException("Aluguel nao encontrado.");
+        return setRental.stream()
+                .filter(x -> x.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RepositoryException("Aluguel não encontrado."));
     }
 
     @Override
     public Set<Rental> listContractsRental() {
         return this.setRental;
     }
-
 }

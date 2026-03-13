@@ -6,6 +6,7 @@ import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
 import br.com.portifolio.vehiclerentalsys.domain.exception.RepositoryException;
 import br.com.portifolio.vehiclerentalsys.domain.model.Vehicle;
 import br.com.portifolio.vehiclerentalsys.repository.VehicleRepositoryInterface;
+import br.com.portifolio.vehiclerentalsys.utils.ListUtils;
 import br.com.portifolio.vehiclerentalsys.utils.ScannerUtils;
 
 import java.util.Scanner;
@@ -63,12 +64,10 @@ public class VehicleController {
 
     public void listVehicles(VehicleRepositoryInterface vehicleRepo) {
         Set<Vehicle> vehicles = vehicleRepo.listVehicles();
-        if (vehicles.isEmpty()) {
-            System.out.println("Lista de veiculos vazia!");
-        } else {
-            for (Vehicle vehicle : vehicles) {
-                System.out.println(vehicle);
+            try {
+                ListUtils.list(vehicles);
+            } catch (DomainException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
-}

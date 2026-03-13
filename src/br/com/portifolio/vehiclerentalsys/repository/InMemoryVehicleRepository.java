@@ -26,12 +26,10 @@ public class InMemoryVehicleRepository implements VehicleRepositoryInterface {
 
     @Override
     public Vehicle findVehicleByPlate(String plate) throws RepositoryException {
-        for (Vehicle vehicleObj : this.vehicleList) {
-            if (plate.trim().equals(vehicleObj.getPlate())) {
-                return vehicleObj;
-            }
-
-        }
+        vehicleList.stream()
+                .filter(x -> x.getPlate().equals(plate))
+                .findFirst()
+                .orElseThrow(() -> new RepositoryException("Veiculo nao encontrado! Placa: " + plate));
         throw new RepositoryException("Veiculo nao encontrado! Placa: " + plate);
     }
 
