@@ -1,4 +1,4 @@
-package br.com.portifolio.vehiclerentalsys.ui;
+package br.com.portifolio.vehiclerentalsys.ui.console;
 
 import br.com.portifolio.vehiclerentalsys.controller.VehicleController;
 import br.com.portifolio.vehiclerentalsys.domain.entities.Vehicle;

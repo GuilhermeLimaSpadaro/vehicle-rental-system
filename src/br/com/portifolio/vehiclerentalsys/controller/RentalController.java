@@ -15,9 +15,8 @@ public class RentalController {
         this.rentalService = rentalService;
     }
 
-    public void createRental(int id, LocalDate startDate, LocalDate endDate, Client client, Vehicle vehicle) {
-        Rental rental = new Rental(id, startDate, endDate, client, vehicle);
-        rentalService.createRental(rental);
+    public void createRental(int id, LocalDate startDate, LocalDate endDate, int clientId, String vehiclePlate) {
+        rentalService.createRental(id, startDate, endDate, clientId, vehiclePlate);
     }
 
     public void removeRental(int id) {

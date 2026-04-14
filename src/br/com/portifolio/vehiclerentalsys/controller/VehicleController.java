@@ -23,11 +23,11 @@ public class VehicleController {
         vehicleService.removeVehicle(plate);
     }
 
-    public Vehicle getVehicleByPlate(String plate){
+    public Vehicle getVehicleByPlate(String plate) {
         return vehicleService.getVehicleByPlate(plate);
     }
 
-    public Set<Vehicle> getAllVehicles(){
+    public Set<Vehicle> getAllVehicles() {
         return vehicleService.getAllVehicles();
     }
 }

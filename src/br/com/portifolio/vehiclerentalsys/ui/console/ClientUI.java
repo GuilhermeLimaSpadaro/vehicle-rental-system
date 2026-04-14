@@ -1,9 +1,8 @@
-package br.com.portifolio.vehiclerentalsys.ui;
+package br.com.portifolio.vehiclerentalsys.ui.console;
 
 import br.com.portifolio.vehiclerentalsys.controller.ClientController;
 import br.com.portifolio.vehiclerentalsys.domain.entities.Client;
 import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
-import br.com.portifolio.vehiclerentalsys.utils.ListUtils;
 import br.com.portifolio.vehiclerentalsys.utils.ScannerUtils;
 
 import java.util.Scanner;
@@ -54,11 +53,7 @@ public class ClientUI {
     }
 
     public void listClients() {
-        Set<Client> clients = clientController.getAllClients();
-        try {
-            ListUtils.list(clients);
-        } catch (DomainException e) {
-            System.out.println(e.getMessage());
-        }
+        Set<Client> clientSet = clientController.getAllClients();
+        clientSet.forEach(System.out::println);
     }
 }

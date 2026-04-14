@@ -3,9 +3,9 @@ package br.com.portifolio.vehiclerentalsys;
 import br.com.portifolio.vehiclerentalsys.controller.ClientController;
 import br.com.portifolio.vehiclerentalsys.controller.RentalController;
 import br.com.portifolio.vehiclerentalsys.controller.VehicleController;
-import br.com.portifolio.vehiclerentalsys.ui.ClientUI;
-import br.com.portifolio.vehiclerentalsys.ui.RentalUI;
-import br.com.portifolio.vehiclerentalsys.ui.VehicleUI;
+import br.com.portifolio.vehiclerentalsys.ui.console.ClientUI;
+import br.com.portifolio.vehiclerentalsys.ui.console.RentalUI;
+import br.com.portifolio.vehiclerentalsys.ui.console.VehicleUI;
 import br.com.portifolio.vehiclerentalsys.db.DataBase;
 import br.com.portifolio.vehiclerentalsys.repository.factory.DaoFactory;
 import br.com.portifolio.vehiclerentalsys.repository.interfaces.ClientDao;
@@ -32,7 +32,7 @@ public class Main {
 
         ClientService clientService = new ClientService(clientDao);
         VehicleService vehicleService = new VehicleService(vehicleDao);
-        RentalService rentalService = new RentalService(rentalDao);
+        RentalService rentalService = new RentalService(rentalDao, clientService, vehicleService);
 
         ClientController clientController = new ClientController(clientService);
         VehicleController vehicleController = new VehicleController(vehicleService);
@@ -91,9 +91,6 @@ public class Main {
                     case 12:
                         rentalUI.listRental();
                         break;
-                    case 13:
-                        rentalUI.vehicleReturn(input);
-                        break;
                     default:
                         System.out.println("Opcao invalida, Tente novamente!");
                         break;
@@ -105,23 +102,22 @@ public class Main {
 
     public static void menu() {
         System.out.println();
-        System.out.printf("=========================" + System.lineSeparator() + "       MENU PRINCIPAL" + System.lineSeparator() + "=========================" + System.lineSeparator());
-        System.out.println("1.  Cadastrar cliente.");
+        System.out.println("=========================       MENU PRINCIPAL       =========================");
+        System.out.println("1.  Criar cliente.");
         System.out.println("2.  Remover cliente.");
         System.out.println("3.  Buscar cliente.");
         System.out.println("4.  Listar clientes.");
         System.out.println("----------------------");
-        System.out.println("5.  Cadastrar veiculo.");
+        System.out.println("5.  Criar veiculo.");
         System.out.println("6.  Remover veiculo.");
         System.out.println("7.  Buscar veiculo.");
         System.out.println("8.  Listar veiculos.");
         System.out.println("----------------------");
-        System.out.println("9.  Alugar veiculo.");
+        System.out.println("9.  Criar aluguel.");
         System.out.println("10. Excluir aluguel");
         System.out.println("11. Buscar aluguel.");
         System.out.println("12. Listar alugueis.");
-        System.out.println("13. Registrar devolucao.");
         System.out.println("0.  Sair.");
-        System.out.print(System.lineSeparator() + "Escolha uma das opcoes acima: ");
+        System.out.print("Escolha uma das opcoes acima: ");
     }
 }

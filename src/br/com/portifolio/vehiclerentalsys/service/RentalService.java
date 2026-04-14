@@ -1,6 +1,8 @@
 package br.com.portifolio.vehiclerentalsys.service;
 
+import br.com.portifolio.vehiclerentalsys.domain.entities.Client;
 import br.com.portifolio.vehiclerentalsys.domain.entities.Rental;
+import br.com.portifolio.vehiclerentalsys.domain.entities.Vehicle;
 import br.com.portifolio.vehiclerentalsys.domain.exception.BusinessException;
 import br.com.portifolio.vehiclerentalsys.repository.interfaces.RentalDao;
 
@@ -10,13 +12,20 @@ import java.util.Set;
 
 public class RentalService {
     private final RentalDao rentalDao;
+    private final ClientService clientService;
+    private final VehicleService vehicleService;
     private final static double tax = 0.10;
 
-    public RentalService(RentalDao rentalDao) {
+    public RentalService(RentalDao rentalDao, ClientService clientService, VehicleService vehicleService) {
         this.rentalDao = rentalDao;
+        this.clientService = clientService;
+        this.vehicleService = vehicleService;
     }
 
-    public void createRental(Rental rental) {
+    public void createRental(int id, LocalDate startDate, LocalDate endDate, int clientId, String vehiclePlate) {
+        Client client = clientService.getClientById(clientId);
+        Vehicle vehicle = vehicleService.getVehicleByPlate(vehiclePlate);
+        Rental rental = new Rental(id, startDate, endDate, client, vehicle);
         if (rentalDao.findRentalById(rental.getId()) != null) {
             throw new BusinessException("Aluguel ja existe!");
         }

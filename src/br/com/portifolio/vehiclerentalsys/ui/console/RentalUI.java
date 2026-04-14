@@ -1,4 +1,4 @@
-package br.com.portifolio.vehiclerentalsys.ui;
+package br.com.portifolio.vehiclerentalsys.ui.console;
 
 import br.com.portifolio.vehiclerentalsys.controller.RentalController;
 import br.com.portifolio.vehiclerentalsys.domain.exception.DomainException;
@@ -20,18 +20,20 @@ public class RentalUI {
     public void createRental(Scanner input) {
         System.out.println();
         try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             System.out.print("ID: ");
             int id = ScannerUtils.intValidation(input);
-            System.out.println("Data de saida registrada.");
-            LocalDate startDate = LocalDate.now();
-            System.out.print("Data de entrada: ");
-            String inputDate = input.nextLine();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate endDate = LocalDate.parse(inputDate, dtf);
+            System.out.print("Data de saida do veiculo: ");
+            String checkInDate = input.nextLine();
+            LocalDate startDate = LocalDate.parse(checkInDate, dtf);
+            System.out.print("Data de entrada do veiculo: ");
+            String checkOutDate = input.nextLine();
+            LocalDate endDate = LocalDate.parse(checkOutDate, dtf);
             System.out.print("Informe o ID do cliente: ");
             int clientId = ScannerUtils.intValidation(input);
-            System.out.println("Informe o id do veiculo: ");
-            int vehicleId = ScannerUtils.intValidation(input);
+            System.out.print("Informe a placa do veiculo: ");
+            String vehiclePlate = input.nextLine();
+            rentalController.createRental(id, startDate, endDate, clientId, vehiclePlate);
         } catch (DomainException e) {
             System.out.println(e.getMessage());
         }
@@ -58,27 +60,14 @@ public class RentalUI {
     }
 
     public void listRental() {
-        Set<Rental> rentals = rentalController.getAllRentals();
-        if (rentals.isEmpty()) {
-            System.out.println("Lista de alugueis vazia!");
-        } else {
-            for (Rental rental : rentals) {
-                double totalPayment = rentalController.totalPayment(rental);
-                System.out.println(rental);
-                System.out.println("Valor total: " + totalPayment);
-            }
-        }
+        Set<Rental> rentalSet = rentalController.getAllRentals();
+        rentalSet.forEach(System.out::println);
     }
 
-    public void vehicleReturn(Scanner input) {
-        try {
-            System.out.print("Informe o ID do aluguel: ");
-            int id = ScannerUtils.intValidation(input);
-            Rental rental = rentalController.getRentalById(id);
-            System.out.println("Sucesso ao registrar devolucao!");
-            System.out.println("Total a ser pago: " + rentalController.totalPayment(rental));
-        } catch (DomainException e) {
-            System.out.println(e.getMessage());
-        }
+    public double totalPayment(Scanner input) {
+        System.out.println("Informe o id do contrato: ");
+        int id = input.nextInt();
+        Rental rental = rentalController.getRentalById(id);
+        return rentalController.totalPayment(rental);
     }
 }

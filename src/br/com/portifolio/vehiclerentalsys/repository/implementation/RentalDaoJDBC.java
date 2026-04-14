@@ -22,24 +22,18 @@ public class RentalDaoJDBC implements RentalDao {
     @Override
     public void insertRental(Rental rental) {
         String sql = "INSERT INTO rental " +
-                "(id, start_date, end_date, client_id, vehicle_id) " +
-                "VALUES (?, ?, ?, ?, ?) ";
-
+                "(start_date, end_date, client_id, vehicle_id) " +
+                "VALUES (?, ?, ?, ?) ";
         try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setInt(1, rental.getId());
-            st.setDate(2, Date.valueOf(rental.getStartDate()));
-            st.setDate(3, Date.valueOf(rental.getEndDate()));
-            st.setInt(4, rental.getClient().getId());
-            st.setInt(5, rental.getVehicle().getId());
-
-            int rowsAffected = st.executeUpdate();
-
-            if (rowsAffected > 0) {
-                try (ResultSet rs = st.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        int id = rs.getInt(1);
-                        rental.setId(id);
-                    }
+            st.setDate(1, Date.valueOf(rental.getStartDate()));
+            st.setDate(2, Date.valueOf(rental.getEndDate()));
+            st.setInt(3, rental.getClient().getId());
+            st.setInt(4, rental.getVehicle().getId());
+            st.executeUpdate();
+            try (ResultSet rs = st.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    rental.setId(id);
                 }
             }
         } catch (SQLException e) {
@@ -48,7 +42,6 @@ public class RentalDaoJDBC implements RentalDao {
     }
 
     @Override
-
     public Rental findRentalById(int id) {
         String sql = "SELECT r.id AS rental_id, r.start_date, r.end_date, " +
                 "v.id AS vehicle_id, v.model, v.mark, v.plate, v.price_per_day, v.category, v.availability, " +
@@ -79,9 +72,8 @@ public class RentalDaoJDBC implements RentalDao {
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             int rowsAffected = st.executeUpdate();
-
             if (rowsAffected > 0) {
-                System.out.println("Done! Rows: " + rowsAffected);
+                System.out.println("Done! rows: " + rowsAffected);
             }
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage());
@@ -99,8 +91,8 @@ public class RentalDaoJDBC implements RentalDao {
                 " ORDER BY r.id ";
 
         try (PreparedStatement st = conn.prepareStatement(sql)) {
-            Set<Rental> rentalSet = new TreeSet<>();
             try (ResultSet rs = st.executeQuery()) {
+                Set<Rental> rentalSet = new HashSet<>();
                 Map<Integer, Client> clientMap = new HashMap<>();
                 Map<Integer, Vehicle> vehicleMap = new HashMap<>();
                 Map<Integer, Rental> rentalMap = new HashMap<>();
@@ -171,8 +163,7 @@ public class RentalDaoJDBC implements RentalDao {
                     rs.getInt("client_id"),
                     rs.getString("name"),
                     rs.getString("document"),
-                    rs.getString("phone")
-            );
+                    rs.getString("phone"));
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage()
             );
